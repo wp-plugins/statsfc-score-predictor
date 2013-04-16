@@ -3,7 +3,7 @@
 Plugin Name: StatsFC Score Predictor
 Plugin URI: https://statsfc.com/developers
 Description: StatsFC Score Predictor
-Version: 1.0
+Version: 1.1
 Author: Will Woodward
 Author URI: http://willjw.co.uk
 License: GPL2
@@ -220,8 +220,8 @@ class StatsFC_ScorePredictor extends WP_Widget {
 							<?php
 							} else {
 							?>
-								<input type="text" name="statsfc_score_home" id="statsfc_score_home" maxlength="1">
-								<input type="text" name="statsfc_score_away" id="statsfc_score_away" maxlength="1"><br>
+								<input type="text" name="statsfc_score_home" class="statsfc_score_home" maxlength="1">
+								<input type="text" name="statsfc_score_away" class="statsfc_score_away" maxlength="1"><br>
 								<input type="submit" value="Predict">
 							<?php
 							}
