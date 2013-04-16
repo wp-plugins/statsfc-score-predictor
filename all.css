@@ -1,4 +1,3 @@
-.statsfc_scorepredictor {						max-width: 300px; }
 .statsfc_scorepredictor table {					display: table; width: 100%; border-collapse: collapse; margin-bottom: 0; }
 .statsfc_scorepredictor th,
 .statsfc_scorepredictor td {					text-align: center !important; padding: 2px 5px; }
@@ -12,7 +11,7 @@
 .statsfc_scorepredictor .statsfc_percent {		display: block; position: absolute; left: 8px; height: 1.5em; background-color: #9CE; z-index: -1; border-radius: 5px; }
 .statsfc_scorepredictor .statsfc_footer {		display: block !important; text-align: right; margin-top: 0; padding: 2px 5px; }
 
-.statsfc_scorepredictor .statsfc_team label {				display: inline-block; width: 100%; background-repeat: no-repeat; background-position: top center; background-size: 64px 64px; padding-top: 64px !important; }
+.statsfc_scorepredictor .statsfc_team label {				display: inline-block; width: 100%; background-repeat: no-repeat; background-position: top center; background-size: 80px 80px; padding-top: 80px !important; }
 .statsfc_scorepredictor .statsfc_badge_arsenal {			background-image: url(http://07e7065c82a98efc40aa-75708a17f9f791e155bf324b88c25d79.r61.cf3.rackcdn.com/arsenal.png); }
 .statsfc_scorepredictor .statsfc_badge_astonvilla {			background-image: url(http://07e7065c82a98efc40aa-75708a17f9f791e155bf324b88c25d79.r61.cf3.rackcdn.com/aston-villa.png); }
 .statsfc_scorepredictor .statsfc_badge_chelsea {			background-image: url(http://07e7065c82a98efc40aa-75708a17f9f791e155bf324b88c25d79.r61.cf3.rackcdn.com/chelsea.png); }

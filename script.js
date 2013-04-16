@@ -57,7 +57,7 @@ $j(function() {
 				});
 
 				// Save cookie.
-				$j.cookie(cookie_id, $home.val() + '-' + $away.val(), { expires: 28 });
+				$j.cookie(cookie_id, $home.val() + '-' + $away.val(), { expires: 28, path: '/' });
 			}
 		);
 	});
