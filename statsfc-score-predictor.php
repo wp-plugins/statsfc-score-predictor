@@ -3,7 +3,7 @@
 Plugin Name: StatsFC Score Predictor
 Plugin URI: https://statsfc.com/developers
 Description: StatsFC Score Predictor
-Version: 1.1.1
+Version: 1.2
 Author: Will Woodward
 Author URI: http://willjw.co.uk
 License: GPL2
@@ -37,6 +37,8 @@ class StatsFC_ScorePredictor extends WP_Widget {
 		'fa-cup'			=> 'FA Cup',
 		'league-cup'		=> 'League Cup'
 	);
+
+	private $_path, $api_key, $_isLive = false;
 
 	/**
 	 * Register widget with WordPress.
@@ -165,30 +167,10 @@ class StatsFC_ScorePredictor extends WP_Widget {
 				throw new Exception('Please choose a team');
 			}
 
-			$data = file_get_contents('https://api.statsfc.com/' . esc_attr(str_replace(' ', '', strtolower($team))) . '/fixtures.json?key=' . $api_key . '&limit=5');
+			$this->_path	= str_replace(' ', '', strtolower($team));
+			$this->_api_key	= $api_key;
 
-			if (empty($data)) {
-				throw new Exception('There was an error connecting to the StatsFC API');
-			}
-
-			$json = json_decode($data);
-			if (isset($json->error)) {
-				throw new Exception($json->error);
-			}
-
-			$match = false;
-			foreach ($json as $fixture) {
-				if ($fixture->status !== 'Not started') {
-					continue;
-				}
-
-				$match = $fixture;
-				break;
-			}
-
-			if (! $match) {
-				throw new Exception('No fixtures found');
-			}
+			$match = $this->_getMatch();
 
 			// Get popular predictions.
 			$data = file_get_contents('https://api.statsfc.com/score-predictor.json?key=' . $api_key . '&match_id=' . $match->id);
@@ -212,18 +194,25 @@ class StatsFC_ScorePredictor extends WP_Widget {
 						</th>
 						<td class="statsfc_scores">
 							<?php
-							$cookie_id = 'statsfc_scorepredictor_' . $api_key . '_' . $match->id;
-							if (isset($_COOKIE[$cookie_id])) {
+							if ($this->_isLive) {
 							?>
-								<?php echo $_COOKIE[$cookie_id]; ?><br>
-								<small>Your prediction</small>
+								<?php echo esc_attr($match->runningscore[0]) . ' - ' . esc_attr($match->runningscore[1]); ?><br>
+								<small>Live: <?php echo esc_attr($match->statusshort); ?></small>
 							<?php
 							} else {
-							?>
-								<input type="text" name="statsfc_score_home" class="statsfc_score_home" maxlength="1">
-								<input type="text" name="statsfc_score_away" class="statsfc_score_away" maxlength="1"><br>
-								<input type="submit" value="Predict">
-							<?php
+								$cookie_id = 'statsfc_scorepredictor_' . $api_key . '_' . $match->id;
+								if (isset($_COOKIE[$cookie_id])) {
+								?>
+									<?php echo $_COOKIE[$cookie_id]; ?><br>
+									<small>Your prediction</small>
+								<?php
+								} else {
+								?>
+									<input type="text" name="statsfc_score_home" class="statsfc_score_home" maxlength="1">
+									<input type="text" name="statsfc_score_away" class="statsfc_score_away" maxlength="1"><br>
+									<input type="submit" value="Predict">
+								<?php
+								}
 							}
 							?>
 						</td>
@@ -258,6 +247,61 @@ class StatsFC_ScorePredictor extends WP_Widget {
 		}
 
 		echo $after_widget;
+	}
+
+	private function _getMatch() {
+		$live = $this->_getLive();
+		if ($live !== false) {
+			return $live;
+		}
+
+		$fixture = $this->_getFixture();
+		if ($fixture !== false) {
+			return $fixture;
+		}
+
+		throw new Exception('No match found');
+	}
+
+	private function _getLive() {
+		$data = file_get_contents('https://api.statsfc.com/' . esc_attr($this->_path) . '/live.json?key=' . esc_attr($this->_api_key));
+
+		if (empty($data)) {
+			throw new Exception('There was an error connecting to the StatsFC API');
+		}
+
+		$json = json_decode($data);
+		if (isset($json->error)) {
+			return false;
+		}
+
+		$this->_isLive = true;
+
+		return $json[0];
+	}
+
+	private function _getFixture() {
+		$data = file_get_contents('https://api.statsfc.com/' . esc_attr($this->_path) . '/fixtures.json?key=' . esc_attr($this->_api_key) . '&limit=5');
+
+		if (empty($data)) {
+			throw new Exception('There was an error connecting to the StatsFC API');
+		}
+
+		$json = json_decode($data);
+		if (isset($json->error)) {
+			return false;
+		}
+
+		$match = false;
+		foreach ($json as $fixture) {
+			if ($fixture->status !== 'Not started') {
+				continue;
+			}
+
+			return $fixture;
+		}
+
+		return false;
 	}
 
 	private function _loadExternals($default_css = true) {
