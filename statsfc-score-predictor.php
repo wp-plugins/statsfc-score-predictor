@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: StatsFC Score Predictor
-Plugin URI: https://statsfc.com/developers
+Plugin URI: https://statsfc.com/docs/wordpress
 Description: StatsFC Score Predictor
 Version: 1.2.1
 Author: Will Woodward
