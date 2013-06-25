@@ -3,7 +3,7 @@
 Plugin Name: StatsFC Score Predictor
 Plugin URI: https://statsfc.com/docs/wordpress
 Description: StatsFC Score Predictor
-Version: 1.3
+Version: 1.4
 Author: Will Woodward
 Author URI: http://willjw.co.uk
 License: GPL2
@@ -35,7 +35,8 @@ class StatsFC_ScorePredictor extends WP_Widget {
 	private static $_competitions = array(
 		'premier-league'	=> 'Premier League',
 		'fa-cup'			=> 'FA Cup',
-		'league-cup'		=> 'League Cup'
+		'league-cup'		=> 'League Cup',
+		'community-shield'	=> 'Community Shield'
 	);
 
 	private $_path, $api_key, $_isLive = false;
