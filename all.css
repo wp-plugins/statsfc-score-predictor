@@ -12,25 +12,3 @@
 .statsfc_scorepredictor .statsfc_score em {		font-style: normal; float: right; }
 .statsfc_scorepredictor .statsfc_percent {		display: block; position: absolute; left: 8px; height: 1.5em; background-color: #9CE; z-index: 1; border-radius: 5px; }
 .statsfc_scorepredictor .statsfc_footer {		display: block !important; text-align: right; margin-top: 0; padding: 2px 5px; }
-
-.statsfc_scorepredictor .statsfc_team label {				display: inline-block; width: 100%; background-repeat: no-repeat; background-position: top center; background-size: 80px 80px; padding-top: 80px !important; }
-.statsfc_scorepredictor .statsfc_badge_arsenal {			background-image: url(//cdn.statsfc.com/arsenal.png); }
-.statsfc_scorepredictor .statsfc_badge_astonvilla {			background-image: url(//cdn.statsfc.com/aston-villa.png); }
-.statsfc_scorepredictor .statsfc_badge_cardiffcity {		background-image: url(//cdn.statsfc.com/cardiff-city.png); }
-.statsfc_scorepredictor .statsfc_badge_chelsea {			background-image: url(//cdn.statsfc.com/chelsea.png); }
-.statsfc_scorepredictor .statsfc_badge_crystalpalace {		background-image: url(//cdn.statsfc.com/crystal-palace.png); }
-.statsfc_scorepredictor .statsfc_badge_everton {			background-image: url(//cdn.statsfc.com/everton.png); }
-.statsfc_scorepredictor .statsfc_badge_fulham {				background-image: url(//cdn.statsfc.com/fulham.png); }
-.statsfc_scorepredictor .statsfc_badge_hullcity {			background-image: url(//cdn.statsfc.com/hull-city.png); }
-.statsfc_scorepredictor .statsfc_badge_liverpool {			background-image: url(//cdn.statsfc.com/liverpool.png); }
-.statsfc_scorepredictor .statsfc_badge_manchestercity {		background-image: url(//cdn.statsfc.com/manchester-city.png); }
-.statsfc_scorepredictor .statsfc_badge_manchesterunited {	background-image: url(//cdn.statsfc.com/manchester-united.png); }
-.statsfc_scorepredictor .statsfc_badge_newcastleunited {	background-image: url(//cdn.statsfc.com/newcastle-united.png); }
-.statsfc_scorepredictor .statsfc_badge_norwichcity {		background-image: url(//cdn.statsfc.com/norwich-city.png); }
-.statsfc_scorepredictor .statsfc_badge_southampton {		background-image: url(//cdn.statsfc.com/southampton.png); }
-.statsfc_scorepredictor .statsfc_badge_stokecity {			background-image: url(//cdn.statsfc.com/stoke-city.png); }
-.statsfc_scorepredictor .statsfc_badge_sunderland {			background-image: url(//cdn.statsfc.com/sunderland.png); }
-.statsfc_scorepredictor .statsfc_badge_swanseacity {		background-image: url(//cdn.statsfc.com/swansea-city.png); }
-.statsfc_scorepredictor .statsfc_badge_tottenhamhotspur {	background-image: url(//cdn.statsfc.com/tottenham-hotspur.png); }
-.statsfc_scorepredictor .statsfc_badge_westbromwichalbion {	background-image: url(//cdn.statsfc.com/west-bromwich-albion.png); }
-.statsfc_scorepredictor .statsfc_badge_westhamunited {		background-image: url(//cdn.statsfc.com/west-ham-united.png); }

@@ -3,7 +3,7 @@
 Plugin Name: StatsFC Score Predictor
 Plugin URI: https://statsfc.com/docs/wordpress
 Description: StatsFC Score Predictor
-Version: 1.4
+Version: 1.4.1
 Author: Will Woodward
 Author URI: http://willjw.co.uk
 License: GPL2
@@ -191,7 +191,10 @@ class StatsFC_ScorePredictor extends WP_Widget {
 				<table>
 					<tr>
 						<td class="statsfc_team">
-							<label for="statsfc_score_home" class="statsfc_badge_<?php echo str_replace(' ', '', strtolower($match->home)); ?>"><?php echo esc_attr($match->homeshort); ?></label>
+							<label for="statsfc_score_home">
+								<img src="//cdn.statsfc.com/<?php echo esc_attr(str_replace(' ', '-', strtolower($match->home))); ?>.png" title="<?php echo esc_attr($match->home); ?>" width="80" height="80"><br>
+								<?php echo esc_attr($match->homeshort); ?>
+							</label>
 						</th>
 						<td class="statsfc_scores">
 							<?php
@@ -218,7 +221,10 @@ class StatsFC_ScorePredictor extends WP_Widget {
 							?>
 						</td>
 						<td class="statsfc_team">
-							<label for="statsfc_score_away" class="statsfc_badge_<?php echo str_replace(' ', '', strtolower($match->away)); ?>"><?php echo esc_attr($match->awayshort); ?></label>
+							<label for="statsfc_score_away">
+								<img src="//cdn.statsfc.com/<?php echo esc_attr(str_replace(' ', '-', strtolower($match->away))); ?>.png" title="<?php echo esc_attr($match->away); ?>" width="80" height="80"><br>
+								<?php echo esc_attr($match->awayshort); ?>
+							</label>
 						</td>
 					</tr>
 					<?php

@@ -4,7 +4,7 @@ Donate link:
 Tags: widget, football, soccer, score, predictor, premier league, fa cup, league cup
 Requires at least: 3.3
 Tested up to: 3.5.1
-Stable tag: 1.4
+Stable tag: 1.4.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -61,9 +61,13 @@ If you want to place the widget into a page rather than a sidebar:
 
 - Updated team badges for 2013/14.
 
-**1.2**:
+**1.4**:
 
 - Added Community Shield fixtures.
+
+**1.4.1**:
+
+- Fixed bug to include shirts of teams no longer in the Premier League.
 
 == Upgrade notice ==
 
