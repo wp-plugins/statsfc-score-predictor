@@ -5,6 +5,12 @@ $j(function() {
 		$j(this).drawBar();
 	});
 
+	$j('input.statsfc_score_home').on('input', function() {
+		if ($j(this).val().length > 0) {
+			$j(this).next('input.statsfc_score_away').focus();
+		}
+	});
+
 	$j('.statsfc_scores input:submit').click(function(e) {
 		var $parent	= $j(this).parents('.statsfc_scorepredictor');
 		var $home	= $parent.find('.statsfc_score_home');

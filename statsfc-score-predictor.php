@@ -3,7 +3,7 @@
 Plugin Name: StatsFC Score Predictor
 Plugin URI: https://statsfc.com/docs/wordpress
 Description: StatsFC Score Predictor
-Version: 1.4.2
+Version: 1.4.3
 Author: Will Woodward
 Author URI: http://willjw.co.uk
 License: GPL2
