@@ -3,7 +3,7 @@
 Plugin Name: StatsFC Score Predictor
 Plugin URI: https://statsfc.com/docs/wordpress
 Description: StatsFC Score Predictor
-Version: 1.4.3
+Version: 1.4.4
 Author: Will Woodward
 Author URI: http://willjw.co.uk
 License: GPL2
@@ -86,9 +86,9 @@ class StatsFC_ScorePredictor extends WP_Widget {
 			<label>
 				<?php _e('Team', STATSFC_SCOREPREDICTOR_ID); ?>:
 				<?php
-				$data = file_get_contents('https://api.statsfc.com/premier-league/teams.json?key=' . (! empty($api_key) ? $api_key : 'free'));
-
 				try {
+					$data = $this->_fetchData('https://api.statsfc.com/premier-league/teams.json?key=' . (! empty($api_key) ? $api_key : 'free'));
+
 					if (empty($data)) {
 						throw new Exception('There was an error connecting to the StatsFC API');
 					}
@@ -174,7 +174,7 @@ class StatsFC_ScorePredictor extends WP_Widget {
 			$match = $this->_getMatch();
 
 			// Get popular predictions.
-			$data = file_get_contents('https://api.statsfc.com/score-predictor.json?key=' . $api_key . '&match_id=' . $match->id);
+			$data = $this->_fetchData('https://api.statsfc.com/score-predictor.json?key=' . $api_key . '&match_id=' . $match->id);
 
 			if (empty($data)) {
 				throw new Exception('There was an error connecting to the StatsFC API');
@@ -256,6 +256,28 @@ class StatsFC_ScorePredictor extends WP_Widget {
 		echo $after_widget;
 	}
 
+	private function _fetchData($url) {
+		if (function_exists('curl_exec')) {
+			$ch = curl_init();
+
+			curl_setopt_array($ch, array(
+				CURLOPT_AUTOREFERER		=> true,
+				CURLOPT_FOLLOWLOCATION	=> true,
+				CURLOPT_HEADER			=> false,
+				CURLOPT_RETURNTRANSFER	=> true,
+				CURLOPT_TIMEOUT			=> 5,
+				CURLOPT_URL				=> $url
+			));
+
+			$data = curl_exec($ch);
+			curl_close($ch);
+
+			return $data;
+		}
+
+		return file_get_contents($url);
+	}
+
 	private function _getMatch() {
 		$live = $this->_getLive();
 		if ($live !== false) {
@@ -271,7 +293,7 @@ class StatsFC_ScorePredictor extends WP_Widget {
 	}
 
 	private function _getLive() {
-		$data = file_get_contents('https://api.statsfc.com/' . esc_attr($this->_path) . '/live.json?key=' . esc_attr($this->_api_key));
+		$data = $this->_fetchData('https://api.statsfc.com/' . esc_attr($this->_path) . '/live.json?key=' . esc_attr($this->_api_key));
 
 		if (empty($data)) {
 			throw new Exception('There was an error connecting to the StatsFC API');
@@ -288,7 +310,7 @@ class StatsFC_ScorePredictor extends WP_Widget {
 	}
 
 	private function _getFixture() {
-		$data = file_get_contents('https://api.statsfc.com/' . esc_attr($this->_path) . '/fixtures.json?key=' . esc_attr($this->_api_key) . '&limit=5');
+		$data = $this->_fetchData('https://api.statsfc.com/' . esc_attr($this->_path) . '/fixtures.json?key=' . esc_attr($this->_api_key) . '&limit=5');
 
 		if (empty($data)) {
 			throw new Exception('There was an error connecting to the StatsFC API');
