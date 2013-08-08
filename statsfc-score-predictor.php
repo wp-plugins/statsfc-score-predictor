@@ -349,4 +349,3 @@ class StatsFC_ScorePredictor extends WP_Widget {
 
 // register StatsFC widget
 add_action('widgets_init', create_function('', 'register_widget("' . STATSFC_SCOREPREDICTOR_ID . '");'));
-?>
