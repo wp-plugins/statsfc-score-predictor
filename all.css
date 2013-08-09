@@ -7,7 +7,7 @@
 .statsfc_scorepredictor .statsfc_scores small {	font-size: .6em; }
 .statsfc_scorepredictor input {					display: inline; }
 .statsfc_scorepredictor input[type="text"] {	font-size: 1.5em; width: 1.25em; text-align: center; }
-.statsfc_scorepredictor input[type="submit"] {	font-size: 1.5em; margin-top: .5em; }
+.statsfc_scorepredictor input[type="submit"] {	margin-top: .5em; }
 .statsfc_scorepredictor .statsfc_score {		font-size: 1.2em; line-height: 1.5em; text-align: left !important; text-shadow: 0 0 2px white; }
 .statsfc_scorepredictor .statsfc_score div {	position: relative; padding: 0 10px; }
 .statsfc_scorepredictor .statsfc_score strong,
