@@ -54,8 +54,10 @@ $j(function() {
 				$j.each(data, function(key, val) {
 					var $row = $j('<tr>').addClass('statsfc_popular_score').append(
 						$j('<td>').attr({ colspan: '3', 'data-percent': val.percent }).addClass('statsfc_score').append(
-							$j('<strong>').text(val.home + '-' + val.away),
-							$j('<em>').text(val.percent + '%')
+							$j('<div>').append(
+								$j('<strong>').text(val.home + '-' + val.away),
+								$j('<em>').text(val.percent + '%')
+							)
 						)
 					);
 
@@ -81,7 +83,7 @@ $j.fn.isNumeric = function() {
 };
 
 $j.fn.drawBar = function() {
-	$j(this).prepend(
+	$j(this).find('div').prepend(
 		$j('<span>').addClass('statsfc_percent').delay(500).animate({ width: $j(this).attr('data-percent') + '%' }, 1000)
 	);
 };

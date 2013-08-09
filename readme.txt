@@ -4,7 +4,7 @@ Donate link:
 Tags: widget, football, soccer, score, predictor, premier league, fa cup, league cup
 Requires at least: 3.3
 Tested up to: 3.5.1
-Stable tag: 1.4.5
+Stable tag: 1.4.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -82,7 +82,7 @@ If you want to place the widget into a page rather than a sidebar:
 - Use cURL to fetch API data if possible.
 - Fixed image CSS overrides from WordPress themes.
 
-**1.4.5**:
+**1.4.6**:
 
 - Fixed 'Popular scores' CSS bug in Firefox.
 
