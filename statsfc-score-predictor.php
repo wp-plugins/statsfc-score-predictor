@@ -3,7 +3,7 @@
 Plugin Name: StatsFC Score Predictor
 Plugin URI: https://statsfc.com/docs/wordpress
 Description: StatsFC Score Predictor
-Version: 1.4.4
+Version: 1.4.5
 Author: Will Woodward
 Author URI: http://willjw.co.uk
 License: GPL2
@@ -236,8 +236,10 @@ class StatsFC_ScorePredictor extends WP_Widget {
 						?>
 							<tr class="statsfc_popular_score">
 								<td colspan="3" class="statsfc_score" data-percent="<?php echo esc_attr($prediction->percent); ?>">
-									<strong><?php echo esc_attr($prediction->home); ?>-<?php echo esc_attr($prediction->away); ?></strong>
-									<em><?php echo esc_attr($prediction->percent); ?>%</em>
+									<div>
+										<strong><?php echo esc_attr($prediction->home); ?>-<?php echo esc_attr($prediction->away); ?></strong>
+										<em><?php echo esc_attr($prediction->percent); ?>%</em>
+									</div>
 								</td>
 							</tr>
 						<?php
