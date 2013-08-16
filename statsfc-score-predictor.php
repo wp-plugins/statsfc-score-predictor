@@ -192,7 +192,7 @@ class StatsFC_ScorePredictor extends WP_Widget {
 					<tr>
 						<td class="statsfc_team">
 							<label for="statsfc_score_home">
-								<img src="//cdn.statsfc.com/<?php echo esc_attr(str_replace(' ', '-', strtolower($match->home))); ?>.png" title="<?php echo esc_attr($match->home); ?>" width="80" height="80"><br>
+								<img src="//api.statsfc.com/kit/<?php echo esc_attr(str_replace(' ', '-', strtolower($match->home))); ?>.png" title="<?php echo esc_attr($match->home); ?>" width="80" height="80"><br>
 								<?php echo esc_attr($match->homeshort); ?>
 							</label>
 						</th>
@@ -222,7 +222,7 @@ class StatsFC_ScorePredictor extends WP_Widget {
 						</td>
 						<td class="statsfc_team">
 							<label for="statsfc_score_away">
-								<img src="//cdn.statsfc.com/<?php echo esc_attr(str_replace(' ', '-', strtolower($match->away))); ?>.png" title="<?php echo esc_attr($match->away); ?>" width="80" height="80"><br>
+								<img src="//api.statsfc.com/kit/<?php echo esc_attr(str_replace(' ', '-', strtolower($match->away))); ?>.png" title="<?php echo esc_attr($match->away); ?>" width="80" height="80"><br>
 								<?php echo esc_attr($match->awayshort); ?>
 							</label>
 						</td>
