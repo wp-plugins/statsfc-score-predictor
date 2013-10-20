@@ -12,6 +12,8 @@ $j(function() {
 	});
 
 	$j('.statsfc_scores input:submit').click(function(e) {
+		e.preventDefault();
+
 		var $parent	= $j(this).parents('.statsfc_scorepredictor');
 		var $home	= $parent.find('.statsfc_score_home');
 		var $away	= $parent.find('.statsfc_score_away');
