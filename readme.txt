@@ -1,14 +1,14 @@
 === StatsFC Score Predictor ===
 Contributors: willjw
 Donate link:
-Tags: widget, football, soccer, score, predictor, premier league, fa cup, league cup
+Tags: widget, football, soccer, score, predictor, premier league, fa cup, league cup, champions league, europa league, uefa
 Requires at least: 3.3
 Tested up to: 3.5.1
-Stable tag: 1.4.10
+Stable tag: 1.4.11
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-This widget will place a score predictor for Premier League, FA Cup or League Cup matches on your website.
+This widget will place a score predictor for all matches of any Premier League team on your website.
 
 == Description ==
 
@@ -70,6 +70,8 @@ If you want to place the widget into a page rather than a sidebar:
 **1.4.9**: Added fopen fallback if cURL request fails.
 
 **1.4.10**: Fixed bug where external parent form could be submitted.
+
+**1.4.11**: Simplified Javascript cookies.
 
 == Upgrade notice ==
 

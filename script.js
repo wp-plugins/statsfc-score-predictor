@@ -28,9 +28,9 @@ $j(function() {
 		var api_key		= $parent.attr('data-api-key');
 		var match_id	= $parent.attr('data-match-id');
 		var cookie_id	= 'statsfc_scorepredictor_' + api_key + '_' + match_id;
-		var cookie		= $j.cookie(cookie_id);
+		var cookie		= sfc_getCookie(cookie_id);
 
-		if (typeof cookie !== 'undefined') {
+		if (cookie !== null) {
 			alert('You can only submit one score per match');
 			return;
 		}
@@ -68,7 +68,7 @@ $j(function() {
 				});
 
 				// Save cookie.
-				$j.cookie(cookie_id, $home.val() + '-' + $away.val(), { expires: 28, path: '/' });
+				sfc_setCookie(cookie_id, $home.val() + '-' + $away.val());
 			}
 		);
 	});
@@ -89,3 +89,28 @@ $j.fn.drawBar = function() {
 		$j('<span>').addClass('statsfc_percent').delay(500).animate({ width: $j(this).attr('data-percent') + '%' }, 1000)
 	);
 };
+
+function sfc_setCookie(name, value) {
+	var date = new Date();
+	date.setTime(date.getTime() + (28 * 24 * 60 * 60 * 1000));
+	var expires = '; expires=' + date.toGMTString();
+	document.cookie = escape(name) + '=' + escape(value) + expires + '; path=/';
+}
+
+function sfc_getCookie(name) {
+	var nameEQ	= escape(name) + "=";
+	var ca		= document.cookie.split(';');
+
+	for (var i = 0; i < ca.length; i++) {
+		var c = ca[i];
+		while (c.charAt(0) == ' ') {
+			c = c.substring(1, c.length);
+		}
+
+		if (c.indexOf(nameEQ) == 0) {
+			return unescape(c.substring(nameEQ.length, c.length));
+		}
+	}
+
+	return null;
+}

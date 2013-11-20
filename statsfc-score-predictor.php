@@ -3,7 +3,7 @@
 Plugin Name: StatsFC Score Predictor
 Plugin URI: https://statsfc.com/docs/wordpress
 Description: StatsFC Score Predictor
-Version: 1.4.10
+Version: 1.4.11
 Author: Will Woodward
 Author URI: http://willjw.co.uk
 License: GPL2
@@ -352,10 +352,7 @@ class StatsFC_ScorePredictor extends WP_Widget {
 			wp_enqueue_style(STATSFC_SCOREPREDICTOR_ID . '-css');
 		}
 
-		wp_register_script(STATSFC_SCOREPREDICTOR_ID . '-js-cookie', plugins_url('jquery.cookie.js', __FILE__), array('jquery'));
 		wp_register_script(STATSFC_SCOREPREDICTOR_ID . '-js', plugins_url('script.js', __FILE__), array('jquery'));
-
-		wp_enqueue_script(STATSFC_SCOREPREDICTOR_ID . '-js-cookie');
 		wp_enqueue_script(STATSFC_SCOREPREDICTOR_ID . '-js');
 	}
 }
