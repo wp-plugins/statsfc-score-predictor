@@ -4,7 +4,7 @@ Donate link:
 Tags: widget, football, soccer, score, predictor, premier league, fa cup, league cup, champions league, europa league, uefa
 Requires at least: 3.3
 Tested up to: 3.5.1
-Stable tag: 1.4.11
+Stable tag: 1.4.12
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -72,6 +72,8 @@ If you want to place the widget into a page rather than a sidebar:
 **1.4.10**: Fixed bug where external parent form could be submitted.
 
 **1.4.11**: Simplified Javascript cookies.
+
+**1.4.12**: Tweaked error message.
 
 == Upgrade notice ==
 
