@@ -3,7 +3,7 @@
 Plugin Name: StatsFC Score Predictor
 Plugin URI: https://statsfc.com/docs/wordpress
 Description: StatsFC Score Predictor
-Version: 1.4.12
+Version: 1.5
 Author: Will Woodward
 Author URI: http://willjw.co.uk
 License: GPL2
@@ -32,15 +32,6 @@ define('STATSFC_SCOREPREDICTOR_NAME',	'StatsFC Score Predictor');
  * Adds StatsFC widget.
  */
 class StatsFC_ScorePredictor extends WP_Widget {
-	private static $_competitions = array(
-		'premier-league'	=> 'Premier League',
-		'fa-cup'			=> 'FA Cup',
-		'league-cup'		=> 'League Cup',
-		'community-shield'	=> 'Community Shield'
-	);
-
-	private $_path, $api_key, $_isLive = false;
-
 	/**
 	 * Register widget with WordPress.
 	 */
@@ -59,7 +50,6 @@ class StatsFC_ScorePredictor extends WP_Widget {
 		$defaults = array(
 			'title'			=> __('Score Predictor', STATSFC_SCOREPREDICTOR_ID),
 			'api_key'		=> __('', STATSFC_SCOREPREDICTOR_ID),
-			'competition'	=> __(current(array_keys(self::$_competitions)), STATSFC_SCOREPREDICTOR_ID),
 			'team'			=> __('', STATSFC_SCOREPREDICTOR_ID),
 			'default_css'	=> __('', STATSFC_SCOREPREDICTOR_ID)
 		);
@@ -85,34 +75,7 @@ class StatsFC_ScorePredictor extends WP_Widget {
 		<p>
 			<label>
 				<?php _e('Team', STATSFC_SCOREPREDICTOR_ID); ?>:
-				<?php
-				try {
-					$data = $this->_fetchData('https://api.statsfc.com/premier-league/teams.json?key=' . (! empty($api_key) ? $api_key : 'free'));
-
-					if (empty($data)) {
-						throw new Exception('There was an error connecting to the StatsFC API');
-					}
-
-					$json = json_decode($data);
-					if (isset($json->error)) {
-						throw new Exception($json->error);
-					}
-					?>
-					<select class="widefat" name="<?php echo $this->get_field_name('team'); ?>">
-						<option></option>
-						<?php
-						foreach ($json as $row) {
-							echo '<option value="' . esc_attr($row->path) . '"' . ($row->path == $team ? ' selected' : '') . '>' . esc_attr($row->name) . '</option>' . PHP_EOL;
-						}
-						?>
-					</select>
-				<?php
-				} catch (Exception $e) {
-				?>
-					<input class="widefat" name="<?php echo $this->get_field_name('team'); ?>" type="text" value="<?php echo esc_attr($team); ?>">
-				<?php
-				}
-				?>
+				<input class="widefat" name="<?php echo $this->get_field_name('team'); ?>" type="text" value="<?php echo esc_attr($team); ?>">
 			</label>
 		</p>
 		<p>
@@ -168,62 +131,59 @@ class StatsFC_ScorePredictor extends WP_Widget {
 				throw new Exception('Please choose a team');
 			}
 
-			$this->_path	= str_replace(' ', '', strtolower($team));
-			$this->_api_key	= $api_key;
-
-			$match = $this->_getMatch();
-
-			// Get popular predictions.
-			$data = $this->_fetchData('https://api.statsfc.com/score-predictor.json?key=' . $api_key . '&match_id=' . $match->id);
+			$data = $this->_fetchData('https://api.statsfc.com/widget/score-predictor.json.php?key=' . $api_key . '&team=' . $team);
 
 			if (empty($data)) {
 				throw new Exception('There was an error connecting to the StatsFC API');
 			}
 
-			$predictions = json_decode($data);
-			if (isset($predictions->error)) {
-				throw new Exception($predictions->error);
+			$json = json_decode($data);
+
+			if (isset($json->error)) {
+				throw new Exception($json->error);
 			}
+
+			$fixture		= $json->fixture;
+			$predictions	= $json->scores;
+			$customer		= $json->customer;
 
 			$this->_loadExternals($default_css);
 			?>
-			<div class="statsfc_scorepredictor" data-api-key="<?php echo esc_attr($api_key); ?>" data-match-id="<?php echo esc_attr($match->id); ?>">
+			<div class="statsfc_scorepredictor" data-api-key="<?php echo esc_attr($api_key); ?>" data-match-id="<?php echo esc_attr($fixture->id); ?>">
 				<table>
 					<tr>
 						<td class="statsfc_team">
 							<label for="statsfc_score_home">
-								<img src="//api.statsfc.com/kit/<?php echo esc_attr(str_replace(' ', '-', strtolower($match->home))); ?>.png" title="<?php echo esc_attr($match->home); ?>" width="80" height="80"><br>
-								<?php echo esc_attr($match->homeshort); ?>
+								<img src="//api.statsfc.com/kit/<?php echo esc_attr($fixture->homepath); ?>.png" title="<?php echo esc_attr($fixture->home); ?>" width="80" height="80"><br>
+								<?php echo esc_attr($fixture->home); ?>
 							</label>
 						</th>
 						<td class="statsfc_scores">
 							<?php
-							if ($this->_isLive) {
+							$cookie_id = 'statsfc_scorepredictor_' . $api_key . '_' . $fixture->id;
+
+							if (isset($_COOKIE[$cookie_id])) {
 							?>
-								<?php echo esc_attr($match->runningscore[0]) . ' - ' . esc_attr($match->runningscore[1]); ?><br>
-								<small>Live: <?php echo esc_attr($match->statusshort); ?></small>
+								<?php echo $_COOKIE[$cookie_id]; ?><br>
+								<small>Your prediction</small>
+							<?php
+							} elseif (! $fixture->started) {
+							?>
+								<input type="text" name="statsfc_score_home" class="statsfc_score_home" maxlength="1">
+								<input type="text" name="statsfc_score_away" class="statsfc_score_away" maxlength="1"><br>
+								<input type="submit" value="Predict">
 							<?php
 							} else {
-								$cookie_id = 'statsfc_scorepredictor_' . $api_key . '_' . $match->id;
-								if (isset($_COOKIE[$cookie_id])) {
-								?>
-									<?php echo $_COOKIE[$cookie_id]; ?><br>
-									<small>Your prediction</small>
-								<?php
-								} else {
-								?>
-									<input type="text" name="statsfc_score_home" class="statsfc_score_home" maxlength="1">
-									<input type="text" name="statsfc_score_away" class="statsfc_score_away" maxlength="1"><br>
-									<input type="submit" value="Predict">
-								<?php
-								}
+							?>
+								<span>No more predictions</span>
+							<?php
 							}
 							?>
 						</td>
 						<td class="statsfc_team">
 							<label for="statsfc_score_away">
-								<img src="//api.statsfc.com/kit/<?php echo esc_attr(str_replace(' ', '-', strtolower($match->away))); ?>.png" title="<?php echo esc_attr($match->away); ?>" width="80" height="80"><br>
-								<?php echo esc_attr($match->awayshort); ?>
+								<img src="//api.statsfc.com/kit/<?php echo esc_attr($fixture->awaypath); ?>.png" title="<?php echo esc_attr($fixture->away); ?>" width="80" height="80"><br>
+								<?php echo esc_attr($fixture->away); ?>
 							</label>
 						</td>
 					</tr>
@@ -248,11 +208,19 @@ class StatsFC_ScorePredictor extends WP_Widget {
 					?>
 				</table>
 
-				<p class="statsfc_footer"><small>Powered by StatsFC.com</small></p>
+				<?php
+				if ($customer->advert) {
+				?>
+					<p class="statsfc_footer"><small>Powered by StatsFC.com</small></p>
+				<?php
+				}
+				?>
 			</div>
 		<?php
 		} catch (Exception $e) {
-			echo '<p style="text-align: center;"><img src="//statsfc.com/i/icon.png" width="64" height="64" alt="Football widgets and API"><br><a href="https://statsfc.com" title="Football widgets and API" target="_blank">StatsFC.com</a> – ' . esc_attr($e->getMessage()) .'</p>' . PHP_EOL;
+		?>
+			<p>StatsFC.com – <?php echo esc_attr($e->getMessage()); ?></p>
+		<?php
 		}
 
 		echo $after_widget;
@@ -289,61 +257,6 @@ class StatsFC_ScorePredictor extends WP_Widget {
 
 	private function _fopenRequest($url) {
 		return file_get_contents($url);
-	}
-
-	private function _getMatch() {
-		$live = $this->_getLive();
-		if ($live !== false) {
-			return $live;
-		}
-
-		$fixture = $this->_getFixture();
-		if ($fixture !== false) {
-			return $fixture;
-		}
-
-		throw new Exception('No match found');
-	}
-
-	private function _getLive() {
-		$data = $this->_fetchData('https://api.statsfc.com/' . esc_attr($this->_path) . '/live.json?key=' . esc_attr($this->_api_key));
-
-		if (empty($data)) {
-			throw new Exception('There was an error connecting to the StatsFC API');
-		}
-
-		$json = json_decode($data);
-		if (isset($json->error)) {
-			return false;
-		}
-
-		$this->_isLive = true;
-
-		return $json[0];
-	}
-
-	private function _getFixture() {
-		$data = $this->_fetchData('https://api.statsfc.com/' . esc_attr($this->_path) . '/fixtures.json?key=' . esc_attr($this->_api_key) . '&limit=5');
-
-		if (empty($data)) {
-			throw new Exception('There was an error connecting to the StatsFC API');
-		}
-
-		$json = json_decode($data);
-		if (isset($json->error)) {
-			return false;
-		}
-
-		$match = false;
-		foreach ($json as $fixture) {
-			if ($fixture->status !== 'Not started') {
-				continue;
-			}
-
-			return $fixture;
-		}
-
-		return false;
 	}
 
 	private function _loadExternals($default_css = true) {

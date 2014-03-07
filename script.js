@@ -5,12 +5,6 @@ $j(function() {
 		$j(this).drawBar();
 	});
 
-	$j('input.statsfc_score_home').on('input', function() {
-		if ($j(this).val().length > 0) {
-			$j(this).next('input.statsfc_score_away').focus();
-		}
-	});
-
 	$j('.statsfc_scores input:submit').click(function(e) {
 		e.preventDefault();
 
@@ -37,7 +31,7 @@ $j(function() {
 
 		// Submit the score to StatsFC.
 		$j.getJSON(
-			'https://api.statsfc.com/score-predictor.json?callback=?',
+			'https://api.statsfc.com/widget/score-predictor.json.php?callback=?',
 			{
 				key:		api_key,
 				match_id:	match_id,
@@ -53,7 +47,7 @@ $j(function() {
 				// Update percentages.
 				$parent.find('.statsfc_popular_score').remove();
 
-				$j.each(data, function(key, val) {
+				$j.each(data.scores, function(key, val) {
 					var $row = $j('<tr>').addClass('statsfc_popular_score').append(
 						$j('<td>').attr({ colspan: '3', 'data-percent': val.percent }).addClass('statsfc_score').append(
 							$j('<div>').append(
