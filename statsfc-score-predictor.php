@@ -127,11 +127,11 @@ class StatsFC_ScorePredictor extends WP_Widget {
 		echo $before_title . $title . $after_title;
 
 		try {
-			if (empty($team)) {
-				throw new Exception('Please choose a team');
+			if (strlen($team) == 0) {
+				throw new Exception('Please choose a team from the widget options');
 			}
 
-			$data = $this->_fetchData('https://api.statsfc.com/widget/score-predictor.json.php?key=' . $api_key . '&team=' . $team);
+			$data = $this->_fetchData('https://api.statsfc.com/widget/score-predictor.json.php?key=' . urlencode($api_key) . '&team=' . urlencode($team));
 
 			if (empty($data)) {
 				throw new Exception('There was an error connecting to the StatsFC API');
