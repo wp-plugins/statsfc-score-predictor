@@ -3,7 +3,7 @@
 Plugin Name: StatsFC Score Predictor
 Plugin URI: https://statsfc.com/docs/wordpress
 Description: StatsFC Score Predictor
-Version: 1.5
+Version: 1.6
 Author: Will Woodward
 Author URI: http://willjw.co.uk
 License: GPL2
@@ -131,7 +131,7 @@ class StatsFC_ScorePredictor extends WP_Widget {
 				throw new Exception('Please choose a team from the widget options');
 			}
 
-			$data = $this->_fetchData('https://api.statsfc.com/widget/score-predictor.json.php?key=' . urlencode($api_key) . '&team=' . urlencode($team));
+			$data = $this->_fetchData('https://api.statsfc.com/crowdscores/score-predictor.php?key=' . urlencode($api_key) . '&team=' . urlencode($team));
 
 			if (empty($data)) {
 				throw new Exception('There was an error connecting to the StatsFC API');
@@ -143,31 +143,37 @@ class StatsFC_ScorePredictor extends WP_Widget {
 				throw new Exception($json->error);
 			}
 
-			$fixture		= $json->fixture;
+			$match			= $json->match;
 			$predictions	= $json->scores;
 			$customer		= $json->customer;
 
-			$this->_loadExternals($default_css);
+			if ($default_css) {
+				wp_register_style(STATSFC_SCOREPREDICTOR_ID . '-css', plugins_url('all.css', __FILE__));
+				wp_enqueue_style(STATSFC_SCOREPREDICTOR_ID . '-css');
+			}
+
+			wp_register_script(STATSFC_SCOREPREDICTOR_ID . '-js', plugins_url('script.js', __FILE__), array('jquery'));
+			wp_enqueue_script(STATSFC_SCOREPREDICTOR_ID . '-js');
 			?>
-			<div class="statsfc_scorepredictor" data-api-key="<?php echo esc_attr($api_key); ?>" data-match-id="<?php echo esc_attr($fixture->id); ?>">
+			<div class="statsfc_scorepredictor" data-api-key="<?php echo esc_attr($api_key); ?>" data-match-id="<?php echo esc_attr($match->id); ?>">
 				<table>
 					<tr>
 						<td class="statsfc_team">
 							<label for="statsfc_score_home">
-								<img src="//api.statsfc.com/kit/<?php echo esc_attr($fixture->homepath); ?>.png" title="<?php echo esc_attr($fixture->home); ?>" width="80" height="80"><br>
-								<?php echo esc_attr($fixture->home); ?>
+								<img src="//api.statsfc.com/kit/<?php echo esc_attr($match->homepath); ?>.png" title="<?php echo esc_attr($match->home); ?>" width="80" height="80"><br>
+								<?php echo esc_attr($match->home); ?>
 							</label>
 						</th>
 						<td class="statsfc_scores">
 							<?php
-							$cookie_id = 'statsfc_scorepredictor_' . $api_key . '_' . $fixture->id;
+							$cookie_id = 'statsfc_scorepredictor_' . $api_key . '_' . $match->id;
 
 							if (isset($_COOKIE[$cookie_id])) {
 							?>
 								<?php echo $_COOKIE[$cookie_id]; ?><br>
 								<small>Your prediction</small>
 							<?php
-							} elseif (! $fixture->started) {
+							} elseif (! $match->started) {
 							?>
 								<input type="text" name="statsfc_score_home" class="statsfc_score_home" maxlength="1">
 								<input type="text" name="statsfc_score_away" class="statsfc_score_away" maxlength="1"><br>
@@ -175,15 +181,18 @@ class StatsFC_ScorePredictor extends WP_Widget {
 							<?php
 							} else {
 							?>
-								<span>No more predictions</span>
+								<span>
+									<small>Live: <?php echo esc_attr($match->status); ?></small><br>
+									<?php echo esc_attr(implode(' - ', $match->score)); ?>
+								</span>
 							<?php
 							}
 							?>
 						</td>
 						<td class="statsfc_team">
 							<label for="statsfc_score_away">
-								<img src="//api.statsfc.com/kit/<?php echo esc_attr($fixture->awaypath); ?>.png" title="<?php echo esc_attr($fixture->away); ?>" width="80" height="80"><br>
-								<?php echo esc_attr($fixture->away); ?>
+								<img src="//api.statsfc.com/kit/<?php echo esc_attr($match->awaypath); ?>.png" title="<?php echo esc_attr($match->away); ?>" width="80" height="80"><br>
+								<?php echo esc_attr($match->away); ?>
 							</label>
 						</td>
 					</tr>
@@ -208,19 +217,11 @@ class StatsFC_ScorePredictor extends WP_Widget {
 					?>
 				</table>
 
-				<?php
-				if ($customer->advert) {
-				?>
-					<p class="statsfc_footer"><small>Powered by StatsFC.com</small></p>
-				<?php
-				}
-				?>
+				<p class="statsfc_footer">Powered by StatsFC.com. Fan data via CrowdScores.com</p>
 			</div>
 		<?php
 		} catch (Exception $e) {
-		?>
-			<p>StatsFC.com – <?php echo esc_attr($e->getMessage()); ?></p>
-		<?php
+			echo '<p style="text-align: center;">StatsFC.com – ' . esc_attr($e->getMessage()) .'</p>' . PHP_EOL;
 		}
 
 		echo $after_widget;
@@ -257,16 +258,6 @@ class StatsFC_ScorePredictor extends WP_Widget {
 
 	private function _fopenRequest($url) {
 		return file_get_contents($url);
-	}
-
-	private function _loadExternals($default_css = true) {
-		if ($default_css) {
-			wp_register_style(STATSFC_SCOREPREDICTOR_ID . '-css', plugins_url('all.css', __FILE__));
-			wp_enqueue_style(STATSFC_SCOREPREDICTOR_ID . '-css');
-		}
-
-		wp_register_script(STATSFC_SCOREPREDICTOR_ID . '-js', plugins_url('script.js', __FILE__), array('jquery'));
-		wp_enqueue_script(STATSFC_SCOREPREDICTOR_ID . '-js');
 	}
 }
 
