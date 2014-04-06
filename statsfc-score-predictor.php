@@ -217,7 +217,7 @@ class StatsFC_ScorePredictor extends WP_Widget {
 					?>
 				</table>
 
-				<p class="statsfc_footer">Powered by StatsFC.com. Fan data via CrowdScores.com</p>
+				<p class="statsfc_footer"><small>Powered by StatsFC.com. Fan data via CrowdScores.com</small></p>
 			</div>
 		<?php
 		} catch (Exception $e) {
