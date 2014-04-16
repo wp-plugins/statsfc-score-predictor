@@ -44,7 +44,17 @@ $j(function() {
 					return;
 				}
 
-				// Update percentages.
+				var score = $home.val() + '-' + $away.val();
+
+				sfc_setCookie(cookie_id, score);
+
+				// Update prediction and percentages.
+				$parent.find('.statsfc_scores').empty().append(
+					$j('<span>').text(score),
+					$j('<br>'),
+					$j('<small>').text('Your prediction')
+				);
+
 				$parent.find('.statsfc_popular_score').remove();
 
 				$j.each(data.scores, function(key, val) {
@@ -60,9 +70,6 @@ $j(function() {
 					$parent.find('table').append($row);
 					$row.find('.statsfc_score[data-percent]').drawBar();
 				});
-
-				// Save cookie.
-				sfc_setCookie(cookie_id, $home.val() + '-' + $away.val());
 			}
 		);
 	});
