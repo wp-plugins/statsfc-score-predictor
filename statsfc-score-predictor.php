@@ -3,7 +3,7 @@
 Plugin Name: StatsFC Score Predictor
 Plugin URI: https://statsfc.com/docs/wordpress
 Description: StatsFC Score Predictor
-Version: 1.6.2
+Version: 1.7
 Author: Will Woodward
 Author URI: http://willjw.co.uk
 License: GPL2
@@ -51,7 +51,8 @@ class StatsFC_ScorePredictor extends WP_Widget {
 			'title'			=> __('Score Predictor', STATSFC_SCOREPREDICTOR_ID),
 			'api_key'		=> __('', STATSFC_SCOREPREDICTOR_ID),
 			'team'			=> __('', STATSFC_SCOREPREDICTOR_ID),
-			'default_css'	=> __('', STATSFC_SCOREPREDICTOR_ID)
+			'default_css'	=> __('', STATSFC_SCOREPREDICTOR_ID),
+			'ssl'			=> __('', STATSFC_SCOREPREDICTOR_ID)
 		);
 
 		$instance		= wp_parse_args((array) $instance, $defaults);
@@ -59,6 +60,7 @@ class StatsFC_ScorePredictor extends WP_Widget {
 		$api_key		= strip_tags($instance['api_key']);
 		$team			= strip_tags($instance['team']);
 		$default_css	= strip_tags($instance['default_css']);
+		$ssl			= strip_tags($instance['ssl']);
 		?>
 		<p>
 			<label>
@@ -84,6 +86,12 @@ class StatsFC_ScorePredictor extends WP_Widget {
 				<input type="checkbox" name="<?php echo $this->get_field_name('default_css'); ?>"<?php echo ($default_css == 'on' ? ' checked' : ''); ?>>
 			</label>
 		</p>
+		<p>
+			<label>
+				<?php _e('Use SSL?', STATSFC_SCOREPREDICTOR_ID); ?>
+				<input type="checkbox" name="<?php echo $this->get_field_name('ssl'); ?>"<?php echo ($ssl == 'on' ? ' checked' : ''); ?>>
+			</label>
+		</p>
 	<?php
 	}
 
@@ -103,6 +111,7 @@ class StatsFC_ScorePredictor extends WP_Widget {
 		$instance['api_key']		= strip_tags($new_instance['api_key']);
 		$instance['team']			= strip_tags($new_instance['team']);
 		$instance['default_css']	= strip_tags($new_instance['default_css']);
+		$instance['ssl']			= strip_tags($new_instance['ssl']);
 
 		return $instance;
 	}
@@ -122,6 +131,7 @@ class StatsFC_ScorePredictor extends WP_Widget {
 		$api_key		= $instance['api_key'];
 		$team			= $instance['team'];
 		$default_css	= $instance['default_css'];
+		$ssl			= $instance['ssl'];
 
 		echo $before_widget;
 		echo $before_title . $title . $after_title;
@@ -131,7 +141,7 @@ class StatsFC_ScorePredictor extends WP_Widget {
 				throw new Exception('Please choose a team from the widget options');
 			}
 
-			$data = $this->_fetchData('https://api.statsfc.com/crowdscores/score-predictor.php?key=' . urlencode($api_key) . '&team=' . urlencode($team));
+			$data = $this->_fetchData('http' . ($ssl ? 's' : '') . '://api.statsfc.com/crowdscores/score-predictor.php?key=' . urlencode($api_key) . '&team=' . urlencode($team));
 
 			if (empty($data)) {
 				throw new Exception('There was an error connecting to the StatsFC API');

@@ -4,7 +4,7 @@ Donate link:
 Tags: widget, football, soccer, score, predictor, premier league, fa cup, league cup, champions league, europa league, uefa
 Requires at least: 3.3
 Tested up to: 3.9
-Stable tag: 1.6.2
+Stable tag: 1.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -80,6 +80,8 @@ If you want to place the widget into a page rather than a sidebar:
 **1.6**: Show the live score if the match has started.
 
 **1.6.2**: Fixed a minor Javascript bug.
+
+**1.7**: Added an option to control whether the API call is over SSL or not.
 
 == Upgrade notice ==
 
