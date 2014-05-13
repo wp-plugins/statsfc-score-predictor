@@ -4,7 +4,7 @@ Donate link:
 Tags: widget, football, soccer, score, predictor, premier league, fa cup, league cup, champions league, europa league, uefa
 Requires at least: 3.3
 Tested up to: 3.9
-Stable tag: 1.7.1
+Stable tag: 1.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -84,6 +84,8 @@ If you want to place the widget into a page rather than a sidebar:
 **1.7**: Added an option to control whether the API call is over SSL or not.
 
 **1.7.1**: Having fixed the root cause, the SSL option has been removed.
+
+**1.8**: Added a `date` parameter.
 
 == Upgrade notice ==
 

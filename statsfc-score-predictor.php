@@ -3,7 +3,7 @@
 Plugin Name: StatsFC Score Predictor
 Plugin URI: https://statsfc.com/docs/wordpress
 Description: StatsFC Score Predictor
-Version: 1.7.1
+Version: 1.8
 Author: Will Woodward
 Author URI: http://willjw.co.uk
 License: GPL2
@@ -51,6 +51,7 @@ class StatsFC_ScorePredictor extends WP_Widget {
 			'title'			=> __('Score Predictor', STATSFC_SCOREPREDICTOR_ID),
 			'api_key'		=> __('', STATSFC_SCOREPREDICTOR_ID),
 			'team'			=> __('', STATSFC_SCOREPREDICTOR_ID),
+			'date'			=> __('', STATSFC_SCOREPREDICTOR_ID),
 			'default_css'	=> __('', STATSFC_SCOREPREDICTOR_ID)
 		);
 
@@ -58,6 +59,7 @@ class StatsFC_ScorePredictor extends WP_Widget {
 		$title			= strip_tags($instance['title']);
 		$api_key		= strip_tags($instance['api_key']);
 		$team			= strip_tags($instance['team']);
+		$date			= strip_tags($instance['date']);
 		$default_css	= strip_tags($instance['default_css']);
 		?>
 		<p>
@@ -76,6 +78,12 @@ class StatsFC_ScorePredictor extends WP_Widget {
 			<label>
 				<?php _e('Team', STATSFC_SCOREPREDICTOR_ID); ?>:
 				<input class="widefat" name="<?php echo $this->get_field_name('team'); ?>" type="text" value="<?php echo esc_attr($team); ?>">
+			</label>
+		</p>
+		<p>
+			<label>
+				<?php _e('Date (YYYY-MM-DD)', STATSFC_SCOREPREDICTOR_ID); ?>:
+				<input class="widefat" name="<?php echo $this->get_field_name('date'); ?>" type="text" value="<?php echo esc_attr($date); ?>" placeholder="YYYY-MM-DD">
 			</label>
 		</p>
 		<p>
@@ -102,6 +110,7 @@ class StatsFC_ScorePredictor extends WP_Widget {
 		$instance['title']			= strip_tags($new_instance['title']);
 		$instance['api_key']		= strip_tags($new_instance['api_key']);
 		$instance['team']			= strip_tags($new_instance['team']);
+		$instance['date']			= strip_tags($new_instance['date']);
 		$instance['default_css']	= strip_tags($new_instance['default_css']);
 
 		return $instance;
@@ -121,6 +130,7 @@ class StatsFC_ScorePredictor extends WP_Widget {
 		$title			= apply_filters('widget_title', $instance['title']);
 		$api_key		= $instance['api_key'];
 		$team			= $instance['team'];
+		$date			= $instance['date'];
 		$default_css	= $instance['default_css'];
 
 		echo $before_widget;
@@ -131,7 +141,7 @@ class StatsFC_ScorePredictor extends WP_Widget {
 				throw new Exception('Please choose a team from the widget options');
 			}
 
-			$data = $this->_fetchData('https://api.statsfc.com/crowdscores/score-predictor.php?key=' . urlencode($api_key) . '&team=' . urlencode($team));
+			$data = $this->_fetchData('https://api.statsfc.com/crowdscores/score-predictor.php?key=' . urlencode($api_key) . '&team=' . urlencode($team) . '&date=' . urlencode($date));
 
 			if (empty($data)) {
 				throw new Exception('There was an error connecting to the StatsFC API');
