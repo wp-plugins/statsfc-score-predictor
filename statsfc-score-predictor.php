@@ -3,7 +3,7 @@
 Plugin Name: StatsFC Score Predictor
 Plugin URI: https://statsfc.com/docs/wordpress
 Description: StatsFC Score Predictor
-Version: 1.8
+Version: 1.9
 Author: Will Woodward
 Author URI: http://willjw.co.uk
 License: GPL2
@@ -32,6 +32,16 @@ define('STATSFC_SCOREPREDICTOR_NAME',	'StatsFC Score Predictor');
  * Adds StatsFC widget.
  */
 class StatsFC_ScorePredictor extends WP_Widget {
+	public $isShortcode = false;
+
+	private static $defaults = array(
+		'title'			=> '',
+		'key'			=> '',
+		'team'			=> '',
+		'date'			=> '',
+		'default_css'	=> ''
+	);
+
 	/**
 	 * Register widget with WordPress.
 	 */
@@ -47,17 +57,9 @@ class StatsFC_ScorePredictor extends WP_Widget {
 	 * @param array $instance Previously saved values from database.
 	 */
 	public function form($instance) {
-		$defaults = array(
-			'title'			=> __('Score Predictor', STATSFC_SCOREPREDICTOR_ID),
-			'api_key'		=> __('', STATSFC_SCOREPREDICTOR_ID),
-			'team'			=> __('', STATSFC_SCOREPREDICTOR_ID),
-			'date'			=> __('', STATSFC_SCOREPREDICTOR_ID),
-			'default_css'	=> __('', STATSFC_SCOREPREDICTOR_ID)
-		);
-
-		$instance		= wp_parse_args((array) $instance, $defaults);
+		$instance		= wp_parse_args((array) $instance, self::$defaults);
 		$title			= strip_tags($instance['title']);
-		$api_key		= strip_tags($instance['api_key']);
+		$key			= strip_tags($instance['key']);
 		$team			= strip_tags($instance['team']);
 		$date			= strip_tags($instance['date']);
 		$default_css	= strip_tags($instance['default_css']);
@@ -70,8 +72,8 @@ class StatsFC_ScorePredictor extends WP_Widget {
 		</p>
 		<p>
 			<label>
-				<?php _e('API key', STATSFC_SCOREPREDICTOR_ID); ?>:
-				<input class="widefat" name="<?php echo $this->get_field_name('api_key'); ?>" type="text" value="<?php echo esc_attr($api_key); ?>">
+				<?php _e('Key', STATSFC_SCOREPREDICTOR_ID); ?>:
+				<input class="widefat" name="<?php echo $this->get_field_name('key'); ?>" type="text" value="<?php echo esc_attr($key); ?>">
 			</label>
 		</p>
 		<p>
@@ -108,7 +110,7 @@ class StatsFC_ScorePredictor extends WP_Widget {
 	public function update($new_instance, $old_instance) {
 		$instance					= $old_instance;
 		$instance['title']			= strip_tags($new_instance['title']);
-		$instance['api_key']		= strip_tags($new_instance['api_key']);
+		$instance['key']			= strip_tags($new_instance['key']);
 		$instance['team']			= strip_tags($new_instance['team']);
 		$instance['date']			= strip_tags($new_instance['date']);
 		$instance['default_css']	= strip_tags($new_instance['default_css']);
@@ -128,20 +130,20 @@ class StatsFC_ScorePredictor extends WP_Widget {
 		extract($args);
 
 		$title			= apply_filters('widget_title', $instance['title']);
-		$api_key		= $instance['api_key'];
+		$key			= $instance['key'];
 		$team			= $instance['team'];
 		$date			= $instance['date'];
 		$default_css	= $instance['default_css'];
 
-		echo $before_widget;
-		echo $before_title . $title . $after_title;
+		$html  = $before_widget;
+		$html .= $before_title . $title . $after_title;
 
 		try {
 			if (strlen($team) == 0) {
 				throw new Exception('Please choose a team from the widget options');
 			}
 
-			$data = $this->_fetchData('https://api.statsfc.com/crowdscores/score-predictor.php?key=' . urlencode($api_key) . '&team=' . urlencode($team) . '&date=' . urlencode($date));
+			$data = $this->_fetchData('https://api.statsfc.com/crowdscores/score-predictor.php?key=' . urlencode($key) . '&team=' . urlencode($team) . '&date=' . urlencode($date));
 
 			if (empty($data)) {
 				throw new Exception('There was an error connecting to the StatsFC API');
@@ -164,77 +166,99 @@ class StatsFC_ScorePredictor extends WP_Widget {
 
 			wp_register_script(STATSFC_SCOREPREDICTOR_ID . '-js', plugins_url('script.js', __FILE__), array('jquery'));
 			wp_enqueue_script(STATSFC_SCOREPREDICTOR_ID . '-js');
-			?>
-			<div class="statsfc_scorepredictor" data-api-key="<?php echo esc_attr($api_key); ?>" data-match-id="<?php echo esc_attr($match->id); ?>">
+
+			$key		= esc_attr($key);
+			$match_id	= esc_attr($match->id);
+			$homeBadge	= esc_attr($match->homepath);
+			$home		= esc_attr($match->home);
+			$cookie_id	= 'statsfc_scorepredictor_' . $key . '_' . $match->id;
+			$awayBadge	= esc_attr($match->awaypath);
+			$away		= esc_attr($match->away);
+
+			$html .= <<< HTML
+			<div class="statsfc_scorepredictor" data-api-key="{$key}" data-match-id="{$match_id}">
 				<table>
 					<tr>
 						<td class="statsfc_team">
 							<label for="statsfc_score_home">
-								<img src="//api.statsfc.com/kit/<?php echo esc_attr($match->homepath); ?>.png" title="<?php echo esc_attr($match->home); ?>" width="80" height="80"><br>
-								<?php echo esc_attr($match->home); ?>
+								<img src="//api.statsfc.com/kit/{$homeBadge}.png" title="{$home}" width="80" height="80"><br>
+								{$home}
 							</label>
 						</th>
 						<td class="statsfc_scores">
-							<?php
-							$cookie_id = 'statsfc_scorepredictor_' . $api_key . '_' . $match->id;
+HTML;
 
-							if (isset($_COOKIE[$cookie_id])) {
-							?>
-								<?php echo $_COOKIE[$cookie_id]; ?><br>
-								<small>Your prediction</small>
-							<?php
-							} elseif (! $match->started) {
-							?>
-								<input type="text" name="statsfc_score_home" class="statsfc_score_home" maxlength="1">
-								<input type="text" name="statsfc_score_away" class="statsfc_score_away" maxlength="1"><br>
-								<input type="submit" value="Predict">
-							<?php
-							} else {
-							?>
-								<span>
-									<small>Live: <?php echo esc_attr($match->status); ?></small><br>
-									<?php echo esc_attr(implode(' - ', $match->score)); ?>
-								</span>
-							<?php
-							}
-							?>
-						</td>
-						<td class="statsfc_team">
-							<label for="statsfc_score_away">
-								<img src="//api.statsfc.com/kit/<?php echo esc_attr($match->awaypath); ?>.png" title="<?php echo esc_attr($match->away); ?>" width="80" height="80"><br>
-								<?php echo esc_attr($match->away); ?>
-							</label>
+			
+
+			if (isset($_COOKIE[$cookie_id])) {
+				$html .= $_COOKIE[$cookie_id] . '<br><small>Your prediction</small>' . PHP_EOL;
+			} elseif (! $match->started) {
+				$html .= <<< HTML
+				<input type="text" name="statsfc_score_home" class="statsfc_score_home" maxlength="1">
+				<input type="text" name="statsfc_score_away" class="statsfc_score_away" maxlength="1"><br>
+				<input type="submit" value="Predict">
+HTML;
+			} else {
+				$status	= esc_attr($match->status);
+				$score	= esc_attr(implode(' - ', $match->score));
+
+				$html .= <<< HTML
+				<span>
+					<small>Live: {$status}</small><br>
+					{$score}
+				</span>
+HTML;
+			}
+
+			$html .= <<< HTML
+				</td>
+				<td class="statsfc_team">
+					<label for="statsfc_score_away">
+						<img src="//api.statsfc.com/kit/{$awayBadge}.png" title="{$away}" width="80" height="80"><br>
+						{$away}
+					</label>
+				</td>
+			</tr>
+HTML;
+
+			if (! empty($predictions)) {
+				$html .= '<tr><th colspan="3">Popular scores</th></tr>' . PHP_EOL;
+
+				foreach ($predictions as $prediction) {
+					$home		= esc_attr($prediction->home);
+					$away		= esc_attr($prediction->away);
+					$percent	= esc_attr($prediction->percent);
+
+					$html .= <<< HTML
+					<tr class="statsfc_popular_score">
+						<td colspan="3" class="statsfc_score" data-percent="{$percent}">
+							<div>
+								<strong>{$home}-{$away}</strong>
+								<em>{$percent}%</em>
+							</div>
 						</td>
 					</tr>
-					<?php
-					if (! empty($predictions)) {
-					?>
-						<tr><th colspan="3">Popular scores</th></tr>
-						<?php
-						foreach ($predictions as $prediction) {
-						?>
-							<tr class="statsfc_popular_score">
-								<td colspan="3" class="statsfc_score" data-percent="<?php echo esc_attr($prediction->percent); ?>">
-									<div>
-										<strong><?php echo esc_attr($prediction->home); ?>-<?php echo esc_attr($prediction->away); ?></strong>
-										<em><?php echo esc_attr($prediction->percent); ?>%</em>
-									</div>
-								</td>
-							</tr>
-						<?php
-						}
-					}
-					?>
+HTML;
+				}
+			}
+
+			$html .= <<< HTML
 				</table>
 
 				<p class="statsfc_footer"><small>Powered by StatsFC.com. Fan data via CrowdScores.com</small></p>
 			</div>
-		<?php
+HTML;
 		} catch (Exception $e) {
-			echo '<p style="text-align: center;">StatsFC.com – ' . esc_attr($e->getMessage()) .'</p>' . PHP_EOL;
+			$html .= '<p style="text-align: center;">StatsFC.com – ' . esc_attr($e->getMessage()) . '</p>' . PHP_EOL;
 		}
 
-		echo $after_widget;
+		$html .= $after_widget;
+
+		if ($this->isShortcode) {
+			return $html;
+		} else {
+			echo $html;
+		}
 	}
 
 	private function _fetchData($url) {
@@ -269,7 +293,17 @@ class StatsFC_ScorePredictor extends WP_Widget {
 	private function _fopenRequest($url) {
 		return file_get_contents($url);
 	}
+
+	public static function shortcode($atts) {
+		$args = shortcode_atts(self::$defaults, $atts);
+
+		$widget					= new self;
+		$widget->isShortcode	= true;
+
+		return $widget->widget(array(), $args);
+	}
 }
 
 // register StatsFC widget
 add_action('widgets_init', create_function('', 'register_widget("' . STATSFC_SCOREPREDICTOR_ID . '");'));
+add_shortcode('statsfc-score-predictor', STATSFC_SCOREPREDICTOR_ID . '::shortcode');
