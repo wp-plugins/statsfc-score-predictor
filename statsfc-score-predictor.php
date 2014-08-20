@@ -3,7 +3,7 @@
 Plugin Name: StatsFC Score Predictor
 Plugin URI: https://statsfc.com/docs/wordpress
 Description: StatsFC Score Predictor
-Version: 1.9.1
+Version: 1.9.2
 Author: Will Woodward
 Author URI: http://willjw.co.uk
 License: GPL2
@@ -181,7 +181,7 @@ class StatsFC_ScorePredictor extends WP_Widget {
 					<tr>
 						<td class="statsfc_team">
 							<label for="statsfc_score_home">
-								<img src="//api.statsfc.com/kit/{$homeBadge}.png" title="{$home}" width="80" height="80"><br>
+								<img src="//api.statsfc.com/kit/{$homeBadge}.svg" title="{$home}" width="80" height="80"><br>
 								{$home}
 							</label>
 						</th>
@@ -214,7 +214,7 @@ HTML;
 				</td>
 				<td class="statsfc_team">
 					<label for="statsfc_score_away">
-						<img src="//api.statsfc.com/kit/{$awayBadge}.png" title="{$away}" width="80" height="80"><br>
+						<img src="//api.statsfc.com/kit/{$awayBadge}.svg" title="{$away}" width="80" height="80"><br>
 						{$away}
 					</label>
 				</td>

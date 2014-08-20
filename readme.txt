@@ -4,7 +4,7 @@ Donate link:
 Tags: widget, football, soccer, score, predictor, premier league, fa cup, league cup, champions league, europa league, uefa
 Requires at least: 3.3
 Tested up to: 3.9
-Stable tag: 1.9.1
+Stable tag: 1.9.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -87,6 +87,8 @@ You can also use the `[statsfc-score-predictor]` shortcode, with the following o
 **1.8**: Added a `date` parameter.
 
 **1.9**: Added `[statsfc-score-predictor]` shortcode.
+
+**1.9.2**: Updated team badges.
 
 == Upgrade notice ==
 
