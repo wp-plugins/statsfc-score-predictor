@@ -4,7 +4,7 @@ Donate link:
 Tags: widget, football, soccer, score, predictor, premier league, fa cup, league cup, champions league, europa league, uefa
 Requires at least: 3.3
 Tested up to: 4.0
-Stable tag: 1.9.5
+Stable tag: 1.10
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -95,6 +95,8 @@ You can also use the `[statsfc-score-predictor]` shortcode, with the following o
 **1.9.4**: Added badge class for each team
 
 **1.9.5**: Use built-in WordPress HTTP API functions
+
+**1.10**: Enabled ad-support
 
 == Upgrade notice ==
 
