@@ -12,9 +12,9 @@ This widget will place a score predictor for all matches of any Premier League t
 
 == Description ==
 
-Add a score predictor for Premier League, FA Cup or League Cup matches to your WordPress website. To request an API key sign up for free at [statsfc.com](https://statsfc.com).
+Add a score predictor for Premier League, FA Cup or League Cup matches to your WordPress website. To request a key sign up for your free trial at [statsfc.com](https://statsfc.com).
 
-For a demo, check out [wp.statsfc.com](http://wp.statsfc.com).
+For a demo, check out [wp.statsfc.com/score-predictor/](http://wp.statsfc.com/score-predictor/).
 
 == Installation ==
 
