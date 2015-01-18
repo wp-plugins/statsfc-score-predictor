@@ -1,11 +1,11 @@
 var $j = jQuery;
 
 $j(function() {
-	$j('.statsfc_score[data-percent]').each(function() {
+	$j('.statsfc_scorepredictor .statsfc_score[data-percent]').each(function() {
 		$j(this).drawBar();
 	});
 
-	$j('.statsfc_scores input:submit').click(function(e) {
+	$j('.statsfc_scorepredictor .statsfc_scores input:submit').click(function(e) {
 		e.preventDefault();
 
 		var $parent	= $j(this).parents('.statsfc_scorepredictor');
