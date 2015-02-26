@@ -31,7 +31,7 @@ $j(function() {
 
 		// Submit the score to StatsFC.
 		$j.getJSON(
-			'//api.statsfc.com/crowdscores/score-predictor.php?callback=?',
+			'https://api.statsfc.com/crowdscores/score-predictor.php?callback=?',
 			{
 				key:		api_key,
 				match_id:	match_id,
