@@ -14,5 +14,4 @@
 .statsfc_scorepredictor .statsfc_score em {		position: relative; z-index: 2; }
 .statsfc_scorepredictor .statsfc_score em {		font-style: normal; float: right; }
 .statsfc_scorepredictor .statsfc_percent {		display: block; position: absolute; left: 0; height: 1.5em; background-color: #9CE; z-index: 1; border-radius: 5px; }
-.statsfc_scorepredictor .statsfc_ad {			display: block !important; text-align: center; margin-top: 10px; }
 .statsfc_scorepredictor .statsfc_footer {		display: block !important; text-align: center; }
