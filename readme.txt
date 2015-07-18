@@ -4,15 +4,15 @@ Donate link:
 Tags: widget, football, soccer, score, predictor, premier league, fa cup, league cup, champions league, europa league, uefa
 Requires at least: 3.3
 Tested up to: 4.0
-Stable tag: 1.12
+Stable tag: 1.13
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-This widget will place a score predictor for all matches of any Premier League team on your website.
+This widget will place a score predictor for a football team's matches on your website.
 
 == Description ==
 
-Add a score predictor for Premier League, FA Cup or League Cup matches to your WordPress website. To request a key sign up for your free trial at [statsfc.com](https://statsfc.com).
+Add a score predictor for football matches to your WordPress website. To request a key sign up for your free trial at [statsfc.com](https://statsfc.com).
 
 For a demo, check out [wp.statsfc.com/score-predictor/](http://wp.statsfc.com/score-predictor/).
 
@@ -99,6 +99,8 @@ You can also use the `[statsfc-score-predictor]` shortcode, with the following o
 **1.10**: Enabled ad-support
 
 **1.12**: Allow more discrete ads for ad-supported accounts
+
+**1.13**: Converted to JS widget
 
 == Upgrade notice ==
 
