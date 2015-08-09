@@ -4,7 +4,7 @@ Donate link:
 Tags: widget, football, soccer, score, predictor, premier league, fa cup, league cup, champions league, europa league, uefa
 Requires at least: 3.3
 Tested up to: 4.0
-Stable tag: 1.13
+Stable tag: 1.14
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -101,6 +101,8 @@ You can also use the `[statsfc-score-predictor]` shortcode, with the following o
 **1.12**: Allow more discrete ads for ad-supported accounts
 
 **1.13**: Converted to JS widget
+
+**1.14**: Fixed "Invalid domain" bug caused by referal domain
 
 == Upgrade notice ==
 
